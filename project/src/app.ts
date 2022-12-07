@@ -68,21 +68,21 @@ function startApp() {
 
 // events
 function initEvents() {
-  rankList.addEventListener('click', handleListClick);
+  rankList?.addEventListener('click', handleListClick);
 }
 
-async function handleListClick(event: MouseEvent) {
+async function handleListClick(event: Event) {
   let selectedId;
   if (
     event.target instanceof HTMLParagraphElement ||
     event.target instanceof HTMLSpanElement
   ) {
-    selectedId = event.target.parentElement.id;
+    selectedId = event?.target?.parentElement?.id;
   }
   if (event.target instanceof HTMLLIElement) {
     selectedId = event.target.id;
   }
-  if (isDeathLoading) {
+  if (isDeathLoading || !selectedId) {
     return;
   }
   clearDeathList();
@@ -125,12 +125,14 @@ function setDeathsList(data: CountryInfoResponse) {
     p.textContent = new Date(value.Date).toLocaleDateString().slice(0, -1);
     li.appendChild(span);
     li.appendChild(p);
-    deathsList.appendChild(li);
+    deathsList?.appendChild(li);
   });
 }
 
 function clearDeathList() {
-  deathsList.innerHTML = null;
+  if (deathsList) {
+    deathsList.innerHTML = '';
+  }
 }
 
 function setTotalDeathsByCountry(data: CountryInfoResponse) {
@@ -152,12 +154,14 @@ function setRecoveredList(data: CountryInfoResponse) {
     p.textContent = new Date(value.Date).toLocaleDateString().slice(0, -1);
     li.appendChild(span);
     li.appendChild(p);
-    recoveredList.appendChild(li);
+    recoveredList?.appendChild(li);
   });
 }
 
 function clearRecoveredList() {
-  recoveredList.innerHTML = null;
+  if (recoveredList) {
+    recoveredList.innerHTML = '';
+  }
 }
 
 function setTotalRecoveredByCountry(data: CountryInfoResponse) {
@@ -165,13 +169,13 @@ function setTotalRecoveredByCountry(data: CountryInfoResponse) {
 }
 
 function startLoadingAnimation() {
-  deathsList.appendChild(deathSpinner);
-  recoveredList.appendChild(recoveredSpinner);
+  deathsList?.appendChild(deathSpinner);
+  recoveredList?.appendChild(recoveredSpinner);
 }
 
 function endLoadingAnimation() {
-  deathsList.removeChild(deathSpinner);
-  recoveredList.removeChild(recoveredSpinner);
+  deathsList?.removeChild(deathSpinner);
+  recoveredList?.removeChild(recoveredSpinner);
 }
 
 async function setupData() {
@@ -251,7 +255,7 @@ function setCountryRanksByConfirmedCases(data: CovidSummaryResponse) {
     p.textContent = value.Country;
     li.appendChild(span);
     li.appendChild(p);
-    rankList.appendChild(li);
+    rankList?.appendChild(li);
   });
 }
 
